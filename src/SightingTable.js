@@ -14,7 +14,7 @@ class SightingTable extends Component {
       const formattedDate = date.getDay() + "." + date.getMonth() + "." + date.getFullYear() +
                             " " + ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
       return (
-        <tr>
+        <tr key={sighting.id}>
           <td> {sighting.species} </td>
           <td> {sighting.count} </td>
           <td> {formattedDate} </td>

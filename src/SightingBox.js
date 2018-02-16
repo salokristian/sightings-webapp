@@ -8,6 +8,7 @@ class SightingBox extends Component {
     super(props);
     this.state = {
       sightingData: [],
+      sorted: 1,    //1 = Ascending, 2 = Descending
       acceptedSpecies: []
     };
   }
@@ -33,6 +34,22 @@ class SightingBox extends Component {
     this.loadSpeciesFromServer();
   }
 
+  sortSightingsByDate() {
+    let sightings = this.state.sightingData;
+    if (this.state.sorted === 2) {
+      sightings.sort((s1, s2) => {
+        return Date.parse(s1.dateTime) - Date.parse(s2.dateTime);
+      });
+      this.setState({sorted: 1});
+    }
+    else {
+      sightings.sort((s1, s2) => {
+        return Date.parse(s2.dateTime) - Date.parse(s1.dateTime);
+      });
+      this.setState({sorted: 2});
+    }
+  }
+
   render() {
     return (
       <div className="Sighting-App">
@@ -40,7 +57,7 @@ class SightingBox extends Component {
         <Grid>
           <Row className="show-grid">
             <Col md={8}>
-              <SightingTable data={this.state.sightingData}/>
+              <SightingTable data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
             </Col>
             <Col md={4}>
               <SightingForm />

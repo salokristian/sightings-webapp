@@ -8,16 +8,16 @@ class SightingTable extends Component {
     super(props);
   }
   
-  render() {
+  render() {//Change to arrows so that only the other is shown
     return(
     <div>
-      <Table striped bordered condensed hover>
+      <Table striped bordered condensed hover responsive>
         <thead> 
           <tr>
-            <th> Species </th> 
-            <th> Count </th> 
-            <th> Time </th> 
-            <th> Description </th> 
+            <th className="col-md-2"> Species </th> 
+            <th className="col-md-1"> Count </th> 
+            <th className="col-md-3"> Time <span style={{textAlign:'right', float:'right'}}> &#9206; &#9207; </span> </th> 
+            <th className="col-md-5"> Description </th> 
           </tr>
         </thead>
         <tbody>

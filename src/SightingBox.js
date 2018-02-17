@@ -27,7 +27,7 @@ class SightingBox extends Component {
     ).then(species => 
       this.setState({acceptedSpecies: species})
     );
-  }
+  } //there is a problem with the network connection, please reload the page (an alert)
 
   componentDidMount() {
     this.loadSightingsFromServer();
@@ -60,7 +60,7 @@ class SightingBox extends Component {
               <SightingTable data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
             </Col>
             <Col md={4}>
-              <SightingForm />
+              <SightingForm species={this.state.acceptedSpecies}/>
             </Col>
           </Row>
         </Grid>

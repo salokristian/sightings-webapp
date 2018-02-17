@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Table } from "react-bootstrap";
+import { Table, Alert } from "react-bootstrap";
 
 
 
@@ -11,8 +11,8 @@ class SightingTable extends Component {
   render() {
     const tableData = this.props.data.map(sighting => {
       const date = new Date(sighting.dateTime);
-      const formattedDate = date.getDate() + "." + date.getMonth() + "." + date.getFullYear();
-      const formattedTime = ("0" + date.getHours()).slice(-2) + ":" + ("0" + date.getMinutes()).slice(-2);
+      const formattedDate = date.getUTCDate() + "." + (date.getMonth() + 1) + "." + date.getUTCFullYear();
+      const formattedTime = ("0" + date.getUTCHours()).slice(-2) + ":" + ("0" + date.getUTCMinutes()).slice(-2);
       return (
         <tr key={sighting.id}>
           <td> {sighting.species} </td>
@@ -40,6 +40,8 @@ class SightingTable extends Component {
             {tableData}
           </tbody>
         </Table>
+        {this.props.error.display && 
+          <Alert bsStyle={this.props.error.style}>{this.props.error.msg}</Alert>}
       </div>
     );
   }

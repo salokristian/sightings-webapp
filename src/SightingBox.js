@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Grid, Row, Col } from "react-bootstrap";
 import SightingTable from "./SightingTable";
 import SightingForm from "./SightingForm";
+import "./SightingBox.css";
 
 class SightingBox extends Component {
   constructor(props) {
@@ -9,16 +10,32 @@ class SightingBox extends Component {
     this.state = {
       sightingData: [],
       sorted: 1,    //1 = Ascending, 2 = Descending
-      acceptedSpecies: []
+      acceptedSpecies: [],
+      fetchStatus: {display: false, msg: "", style: ""},
+      sendStatus: {display: false, msg: "", style: ""}
     };
   }
 
   loadSightingsFromServer() {
-    fetch("http://localhost:8081/sightings").then(
-      response => response.json()
-    ).then( sightings => 
-      this.setState({sightingData: sightings})
-    );
+    fetch("http://localhost:8081/sightings").then( response => {
+      if (!response.ok) {
+        throw new Error();
+      }
+      return response.json();
+    }).then( sightings => 
+      this.setState({
+        sightingData: sightings,
+        fetchStatus: {display: false}
+      })
+    ).catch( () => {
+      this.setState({
+        fetchStatus: {
+          display: true,
+          msg: "There was a problem with the network connection. Sightings could not be loaded. Please reload the page.",
+          style: "danger"
+        }
+      });
+    });
   }
 
   loadSpeciesFromServer() {
@@ -29,9 +46,43 @@ class SightingBox extends Component {
     );
   } //there is a problem with the network connection, please reload the page (an alert)
 
+  sendSpeciesToServer(data) {
+    fetch("http://localhost:8081/sightings", {
+      body: JSON.stringify(data),
+      headers: {
+        "content-type": "application/json",
+      },
+      method: "POST"
+    }).then(response => {
+      if (!response.ok) {
+        throw new Error();
+      }
+      this.loadSightingsFromServer();
+      this.setState({
+        sendStatus: {
+          display: true,
+          msg: "Sighting sent succesfully.",
+          style: "success"
+        }
+      });
+    }).catch(error => {
+      this.setState({
+        sendStatus: {
+          display: true,
+          msg: "There was a problem with the network connection. Error message: " + error.message,
+          style: "danger"
+        }
+      });
+    });
+  }
+
   componentDidMount() {
     this.loadSightingsFromServer();
     this.loadSpeciesFromServer();
+    setInterval(() => {                  
+      this.loadSightingsFromServer();
+      this.loadSpeciesFromServer();
+    }, 5000); //Reload every 5 seconds
   }
 
   sortSightingsByDate() {
@@ -58,11 +109,11 @@ class SightingBox extends Component {
           <Row className="show-grid">
             <Col md={8}>
               <h3> Old Sightings </h3>
-              <SightingTable data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
+              <SightingTable error={this.state.fetchStatus} data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
             </Col>
             <Col md={4}>
               <h3> Add a new sighting </h3>
-              <SightingForm species={this.state.acceptedSpecies}/>
+              <SightingForm species={this.state.acceptedSpecies} onSubmit={(data) => this.sendSpeciesToServer(data)} statusMsg={this.state.sendStatus}/>
             </Col>
           </Row>
         </Grid>

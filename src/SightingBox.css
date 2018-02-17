@@ -1,0 +1,21 @@
+h1 {
+  text-align: center;
+}
+
+h3 {
+  padding: 2%;
+}
+
+.header {
+  align-content: center;
+  padding: 3%;
+  background-color: rgb(255, 210, 61);
+}
+
+.app-logo {
+  width: 15%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  margin-bottom: 3%;
+}

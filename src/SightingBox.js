@@ -3,6 +3,7 @@ import { Grid, Row, Col } from "react-bootstrap";
 import SightingTable from "./SightingTable";
 import SightingForm from "./SightingForm";
 import "./SightingBox.css";
+import duck_img from "./duck_contour.png";
 
 class SightingBox extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class SightingBox extends Component {
         sightingData: sightings,
         fetchStatus: {display: false}
       })
-    ).catch( () => {
+    ).catch( (error) => {
       this.setState({
         fetchStatus: {
           display: true,
@@ -104,15 +105,18 @@ class SightingBox extends Component {
   render() {
     return (
       <div className="Sighting-App">
-        <h1> Duck Sighting App </h1>
+        <div className="header">
+          <img src={duck_img} className="app-logo"/>
+          <h1> DUCK SIGHTING APP </h1>
+        </div>
         <Grid>
           <Row className="show-grid">
             <Col md={8}>
-              <h3> Old Sightings </h3>
+              <h3> OLD SIGHTINGS </h3>
               <SightingTable error={this.state.fetchStatus} data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
             </Col>
             <Col md={4}>
-              <h3> Add a new sighting </h3>
+              <h3> ADD A SIGHTING </h3>
               <SightingForm species={this.state.acceptedSpecies} onSubmit={(data) => this.sendSpeciesToServer(data)} statusMsg={this.state.sendStatus}/>
             </Col>
           </Row>

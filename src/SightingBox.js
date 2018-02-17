@@ -57,9 +57,11 @@ class SightingBox extends Component {
         <Grid>
           <Row className="show-grid">
             <Col md={8}>
+              <h3> Old Sightings </h3>
               <SightingTable data={this.state.sightingData} sort={() => this.sortSightingsByDate()} sortType={this.state.sorted}/>
             </Col>
             <Col md={4}>
+              <h3> Add a new sighting </h3>
               <SightingForm species={this.state.acceptedSpecies}/>
             </Col>
           </Row>

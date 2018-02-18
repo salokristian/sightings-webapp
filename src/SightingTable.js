@@ -2,7 +2,10 @@ import React, { Component } from "react";
 import { Table, Alert } from "react-bootstrap";
 
 
-
+/**
+ * A presentational class representing the received sighting data in a table. 
+ * The table is can be sorted by date.
+ */
 class SightingTable extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +26,7 @@ class SightingTable extends Component {
         </tr>
       );
     });
-    //if the table is empty
+
     return(
       <div>
         <Table striped bordered condensed hover responsive>

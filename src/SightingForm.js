@@ -4,6 +4,11 @@ import DateTime from "react-datetime";
 import moment from "moment";
 import "react-datetime/css/react-datetime.css";
 
+
+/**
+ * This class is responsible for getting and validating user input for a sighting. 
+ * The validated data is then passed on to parent class SightingBox for AJAX. 
+ */
 class SightingForm extends Component {
   constructor(props) {
     super(props);
@@ -15,11 +20,16 @@ class SightingForm extends Component {
     };
   }
 
+  /**
+   * Handler for species drop-down menu, count text box and description text box.
+   * Updates the values and checks if they are valid.
+   * @param {*} event is the occurred event
+   */
   handleChange(event) {
     const target = event.target;
     let change = {value: target.value};
     if (target.id === "count") {
-      if ((parseInt(target.value) && target.value > 0)) {
+      if (parseInt(target.value, 10) && target.value > 0) {
         change.valid = true;
       }
       else {
@@ -37,6 +47,10 @@ class SightingForm extends Component {
     this.setState({[target.id]: change});
   }
 
+  /**
+   * Handler for datetime selector.
+   * @param {*} dateObj The new date object if the selected date is valid, otherwise a string.
+   */
   handleDateChange(dateObj) {
     let change = {value: dateObj};
     if (typeof dateObj === "string" || dateObj instanceof String) {
@@ -49,7 +63,7 @@ class SightingForm extends Component {
   }
 
   getCountValidationState() {
-    if ((parseInt(this.state.count.value) && this.state.count.value > 0) || this.state.count.value === "") {
+    if ((parseInt(this.state.count.value, 10) && this.state.count.value > 0) || this.state.count.value === "") {
       return null;
     }
     else {
@@ -66,24 +80,21 @@ class SightingForm extends Component {
     }
   }
 
-  getDescriptionValidationState() {
-    if (this.state.description.value === "") {
-      return "error";
-    }
-    else {
-      return null;
-    }
-  }
-
   areFieldsValid() {
     return this.state.count.valid && this.state.dateTime.valid && this.state.description.valid && this.state.species.valid;
   }
 
+  /**
+   * This handler is fired after form submission. All data is assumed valid, because
+   * the form cannot be sent if it is invalid. Parses the data to an object which is passed
+   * to parent class' function sendSightingToServer.
+   * @param {*} event form submit event
+   */
   handleSubmit(event) {
     event.preventDefault();
     const data = {
       species: this.state.species.value,
-      count: parseInt(this.state.count.value),
+      count: parseInt(this.state.count.value, 10),
       dateTime: this.state.dateTime.value.format("YYYY-MM-DDTHH:mm:ss") + "Z",
       description: this.state.description.value
     };
@@ -128,8 +139,12 @@ class SightingForm extends Component {
           </FormGroup>
 
           <Button type="submit" disabled={!this.areFieldsValid()}> Submit </Button>
-          {this.props.statusMsg.display && <div>
-            <br /><Alert bsStyle={this.props.statusMsg.style}>{this.props.statusMsg.msg}</Alert></div>}
+          {
+            this.props.statusMsg.display && 
+            <div>
+              <br /> <Alert bsStyle={this.props.statusMsg.style}>{this.props.statusMsg.msg}</Alert>
+            </div>
+          }
         </form>
       </div>
     );

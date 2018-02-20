@@ -23,7 +23,7 @@ class SightingBox extends Component {
   }
 
   loadSightingsFromServer() {
-    fetch("http://localhost:8081/sightings").then( response => {
+    fetch("http://localhost:8000/sightings").then( response => {
       if (!response.ok) {
         throw new Error();
       }
@@ -47,7 +47,7 @@ class SightingBox extends Component {
   }
 
   loadSpeciesFromServer() {
-    fetch("http://localhost:8081/species").then( response => {
+    fetch("http://localhost:8000/species").then( response => {
       if (!response.ok) {
         throw new Error();
       }
@@ -66,7 +66,7 @@ class SightingBox extends Component {
   } 
 
   sendSightingToServer(data) {
-    fetch("http://localhost:8081/sightings", {
+    fetch("http://localhost:8000/sightings", {
       body: JSON.stringify(data),
       headers: {
         "content-type": "application/json",

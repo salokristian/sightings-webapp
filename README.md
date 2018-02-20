@@ -25,11 +25,14 @@ The project consists of the following four main directories:
 The project can be built as follows:
 ```
 git clone https://github.com/salokristian/sightings-webapp.git
+cd sightings-webapp
 npm install
 npm run build
 pip install -r requirements.txt
 python manage.py runserver
 ```
+
+The build is tested to function correctly on a Win10 machine.
 
 
 ## Django Backend
